@@ -6,7 +6,7 @@ on:
       - 'v*.*.*'  # Add a version tag to trigger the release process
 
 jobs:
-  build:
+  buildx:
     runs-on: ubuntu-latest
 
     steps:
