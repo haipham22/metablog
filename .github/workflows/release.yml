@@ -28,7 +28,7 @@ jobs:
           tools: composer
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-req
+        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
 
       - name: Install Node.js dependencies
         run: npm install
