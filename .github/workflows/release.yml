@@ -23,12 +23,12 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.2'
           extensions: mbstring, dom, curl, fileinfo, json, libxml
           tools: composer
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --prefer-dist
+        run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --ignore-platform-req
 
       - name: Install Node.js dependencies
         run: npm install
