@@ -3,10 +3,12 @@ name: Build and Release Metablog Theme
 on:
   push:
     tags:
-      - 'v*.*.*'  # Add a version tag to trigger the release process
+      - 'v*.*.*'     # Trigger on version tags like v1.0.0
+    branches:
+      - main         # Also trigger on push to main
 
 jobs:
-  buildx:
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -37,10 +39,19 @@ jobs:
       - name: Create ZIP package
         run: |
           zip -r metablog.zip . -x "node_modules/*" ".git/*" "tests/*" "resources/*"
+          if [[ "${{ github.ref }}" == "refs/heads/main" ]]; then
+            mv metablog.zip metablog-dev.zip
+          fi
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: metablog.zip
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          files: |
+            ${{ github.event.repository.name }}.zip
+            ${{ github.event.repository.name }}-dev.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
+
