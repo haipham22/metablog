@@ -4,6 +4,18 @@ WordPress blog theme — a [Sage 11](https://roots.io/sage/) (Bedrock) port of t
 [metablog-free](https://github.com/js-template/metablog-free) design (Tailwind +
 the daisyUI palette, ported to CSS variables — no daisyUI dependency).
 
+**Light**
+
+![home light](docs/home-light.png)
+
+**Dark**
+
+![home dark](docs/home-dark.png)
+
+**Single post**
+
+![single post](docs/single.png)
+
 ## Features
 
 - Blade templating via Acorn, assets built with Vite + Tailwind CSS v4
