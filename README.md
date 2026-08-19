@@ -23,7 +23,7 @@ the daisyUI palette, ported to CSS variables — no daisyUI dependency).
 ## Requirements
 
 - PHP ≥ 8.4, WordPress ≥ 6.6 (Bedrock layout: `web/app/themes/metablog`)
-- Node ≥ 20, **pnpm 11** (`packageManager` pinned in `package.json` — CI uses it)
+- Node ≥ 24, **pnpm 11** (`packageManager` pinned in `package.json` — CI uses it)
 - Composer
 
 ## Development
