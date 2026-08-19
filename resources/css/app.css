@@ -100,7 +100,7 @@ html {
    utilities can't reach it from Blade, so style it here. */
 @layer components {
   .nav a {
-    @apply text-base whitespace-nowrap text-base-content/80 transition hover:text-primary hover:duration-300;
+    @apply text-sm whitespace-nowrap text-base-content/80 transition hover:text-primary hover:duration-300 2xl:text-base;
   }
 
   /* multi-level dropdown (wp_nav_menu .sub-menu) */

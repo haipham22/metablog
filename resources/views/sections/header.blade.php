@@ -1,18 +1,20 @@
 <header class="banner py-5">
   <div class="container mx-auto px-5 md:px-0 font-work">
     <div class="grid grid-cols-12 items-center">
-      <div class="col-span-6 xl:col-span-3">
+      <div class="col-span-6 xl:col-span-2">
         @include('partials.brand')
       </div>
 
       @if (has_nav_menu('primary_navigation'))
-        <nav class="nav-primary hidden min-w-0 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden xl:block col-span-7" aria-label="{{ wp_get_nav_menu_name('primary_navigation') }}">
+        {{-- overflow clip (not auto): clips an over-long menu without creating a scroll
+             container, so absolutely-positioned dropdown submenus still render --}}
+        <nav class="nav-primary hidden min-w-0 overflow-x-clip xl:block col-span-9" aria-label="{{ wp_get_nav_menu_name('primary_navigation') }}">
           {!! wp_nav_menu(['theme_location' => 'primary_navigation', 'container' => false, 'menu_class' => 'nav flex w-full items-center justify-center gap-6', 'echo' => false]) !!}
         </nav>
       @endif
 
-      <div class="col-span-6 xl:col-span-2 flex items-center justify-end gap-6">
-        <form method="get" action="{{ home_url('/') }}" class="hidden sm:flex items-center gap-4 rounded-md bg-base-200 py-2 pl-4 pr-3">
+      <div class="col-span-6 xl:col-span-1 flex items-center justify-end gap-6">
+        <form method="get" action="{{ home_url('/') }}" class="hidden 2xl:flex items-center gap-4 rounded-md bg-base-200 py-2 pl-4 pr-3">
           <input type="search" name="s" placeholder="{{ __('Search', 'metablog') }}"
             class="w-28 bg-base-200 font-work text-base text-base-content outline-none placeholder:font-work" />
           <button type="submit" aria-label="{{ __('Search', 'metablog') }}" class="cursor-pointer">
