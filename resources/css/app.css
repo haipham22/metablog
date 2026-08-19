@@ -8,6 +8,11 @@ a:where(:not(.wp-element-button)) {
   text-decoration-line: none;
 }
 
+/* 100vw blocks (post-navigation bleed) must not create scrollbar space */
+html {
+  overflow-x: clip;
+}
+
 /* metablog-free palette (ported from daisyui theme, hex) — swapped via data-theme */
 :root {
   --mb-primary: #4b6bfb;
@@ -178,9 +183,17 @@ a:where(:not(.wp-element-button)) {
     @apply text-xs text-base-content/50;
   }
 
-  /* next/prev article (get_the_post_navigation) */
+  /* next/prev article (get_the_post_navigation) — bleeds out of the narrow
+     single column to the viewport edge so the cards sit on both sides */
   .post-navigation {
     @apply mt-12 grid gap-4 font-work sm:grid-cols-2;
+  }
+
+  @media (min-width: 640px) {
+    .post-navigation {
+      inline-size: 100vw;
+      margin-inline: calc(50% - 50vw);
+    }
   }
 
   .post-navigation .nav-previous,
