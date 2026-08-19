@@ -1,3 +1,378 @@
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Source+Serif+Pro:wght@400;600;700&family=Work+Sans:wght@300;400;500;600;700&display=swap");
 @import "tailwindcss" theme(static);
 @source "../views/";
 @source "../../app/";
+
+/* WP 6.8 core underlines every link; metablog-free uses color-only links */
+a:where(:not(.wp-element-button)) {
+  text-decoration-line: none;
+}
+
+/* 100vw blocks (post-navigation bleed) must not create scrollbar space */
+html {
+  overflow-x: clip;
+}
+
+/* metablog-free palette (ported from daisyui theme, hex) — swapped via data-theme */
+:root {
+  --mb-primary: #4b6bfb;
+  --mb-primary-focus: #405bd5;
+  --mb-secondary: #696a75;
+  --mb-accent: #3cc288;
+  --mb-neutral: #181a2a;
+  --mb-base-100: #ffffff;
+  --mb-base-200: #f6f6f7;
+  --mb-base-300: #e8e8ea;
+  --mb-base-content: #181a2a;
+}
+
+[data-theme="dark"] {
+  --mb-base-100: #181a2a;
+  --mb-base-200: #141624;
+  --mb-base-content: #dcdddf;
+}
+
+/* shadcn design system (docusaurus-tailwind-shadcn-template.netlify.app):
+   neutral light + purple dark, radius .625rem. Fonts/radius not ported —
+   theme keeps Work Sans + Tailwind radius scale. */
+[data-theme="shadcn"] {
+  --mb-primary: #171717;
+  --mb-primary-focus: #0a0a0a;
+  --mb-secondary: #737373;
+  --mb-accent: #f5f5f5;
+  --mb-neutral: #171717;
+  --mb-base-100: #ffffff;
+  --mb-base-200: #f5f5f5;
+  --mb-base-300: #e5e5e5;
+  --mb-base-content: #0a0a0a;
+}
+
+[data-theme="shadcn-dark"] {
+  --mb-primary: #8d54ff;
+  --mb-primary-focus: #a678ff;
+  --mb-secondary: #9f9fa9;
+  --mb-accent: #1d293d;
+  --mb-neutral: #09090b;
+  --mb-base-100: #0f172b;
+  --mb-base-200: #1d293d;
+  --mb-base-300: #263349;
+  --mb-base-content: #fafafa;
+}
+
+@theme {
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1216px;
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-work: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif Pro", Georgia, serif;
+
+  --color-primary: #4b6bfb;
+  --color-primary-focus: #405bd5;
+  --color-secondary: #696a75;
+  --color-accent: #3cc288;
+  --color-neutral: #181a2a;
+}
+
+/* base-* swap with data-theme; inline so utilities emit the var directly */
+@theme inline {
+  --color-base-100: var(--mb-base-100);
+  --color-base-200: var(--mb-base-200);
+  --color-base-300: var(--mb-base-300);
+  --color-base-content: var(--mb-base-content);
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-work);
+    font-weight: 600;
+  }
+
+  body {
+    font-family: var(--font-serif);
+    font-weight: 400;
+  }
+}
+
+/* Markup WordPress emits (widgets, nav links, pagination, comment form) —
+   utilities can't reach it from Blade, so style it here. */
+@layer components {
+  .nav a {
+    @apply text-base whitespace-nowrap text-base-content/80 transition hover:text-primary hover:duration-300;
+  }
+
+  /* multi-level dropdown (wp_nav_menu .sub-menu) */
+  .nav li {
+    @apply relative;
+  }
+
+  .nav .menu-item-has-children > a::after {
+    content: "";
+    @apply ml-1 inline-block h-1.5 w-1.5 rotate-45 border-b border-r border-current align-middle opacity-60;
+  }
+
+  .nav .sub-menu {
+    @apply invisible absolute left-0 top-full z-30 mt-1 w-56 rounded-xl border border-base-content/10 bg-base-100 p-2 opacity-0 shadow-lg transition-all;
+  }
+
+  .nav .sub-menu .sub-menu {
+    @apply left-full top-0 -mt-1;
+  }
+
+  .nav li:hover > .sub-menu,
+  .nav li:focus-within > .sub-menu {
+    @apply visible opacity-100;
+  }
+
+  .nav .sub-menu li {
+    @apply w-full;
+  }
+
+  .nav .sub-menu a {
+    @apply block rounded-lg px-3 py-2 text-sm hover:bg-base-200;
+  }
+
+  .widget h2,
+  .widget h3 {
+    @apply mb-3 text-xs font-semibold font-work uppercase tracking-widest text-base-content/50;
+  }
+
+  .widget ul {
+    @apply space-y-2 text-sm text-base-content/70;
+  }
+
+  .widget a {
+    @apply text-base-content/70 transition hover:text-primary;
+  }
+
+  /* footer menus (wp_nav_menu links come unclassed) */
+  .content-info nav ul a,
+  .content-info .footer-menu a {
+    @apply text-base-content/70 transition hover:text-primary;
+  }
+
+  .content-info nav .current-menu-item > a {
+    @apply text-primary;
+  }
+
+  .widget + .widget {
+    @apply mt-8;
+  }
+
+  /* Block widgets (fresh-install sidebar defaults) don't use get_search_form() */
+  .wp-block-search__label {
+    @apply mb-3 block font-work text-xs font-semibold uppercase tracking-widest text-base-content/50;
+  }
+
+  .wp-block-search__inside-wrapper {
+    @apply flex gap-2;
+  }
+
+  .wp-block-search__input {
+    @apply w-full min-w-0 rounded-md border border-base-content/10 bg-base-100 px-4 py-3 font-work text-base text-base-content outline-none placeholder:text-base focus:border-primary;
+  }
+
+  .wp-block-search__button {
+    @apply cursor-pointer rounded-md bg-primary px-4 py-2 font-work text-sm font-medium text-white transition hover:bg-primary-focus;
+  }
+
+  .wp-block-latest-posts__post-date,
+  .wp-block-latest-comments__comment-date {
+    @apply text-xs text-base-content/50;
+  }
+
+  /* next/prev article (get_the_post_navigation) — bleeds out of the narrow
+     single column to the viewport edge so the cards sit on both sides */
+  .post-navigation {
+    @apply mt-12 grid gap-4 font-work sm:grid-cols-2;
+  }
+
+  @media (min-width: 640px) {
+    .post-navigation {
+      inline-size: 100vw;
+      margin-inline: calc(50% - 50vw);
+    }
+  }
+
+  .post-navigation .nav-previous,
+  .post-navigation .nav-next {
+    @apply rounded-xl border border-base-content/10 p-5 transition hover:border-primary;
+  }
+
+  .post-navigation .nav-next {
+    @apply text-right;
+  }
+
+  .post-navigation a {
+    @apply flex flex-col gap-1;
+  }
+
+  .post-navigation .nav-subtitle {
+    @apply text-xs uppercase tracking-widest text-base-content/50;
+  }
+
+  .post-navigation .nav-title {
+    @apply text-sm font-semibold leading-5 text-base-content;
+  }
+
+  /* Query Loop block pagination inside post content */
+  .e-content .wp-block-query-pagination,
+  .e-content .wp-block-comments-pagination {
+    @apply flex flex-wrap items-center justify-center gap-2;
+  }
+
+  .e-content .wp-block-query-pagination .page-numbers,
+  .e-content .wp-block-comments-pagination .page-numbers {
+    @apply inline-flex h-10 min-w-10 items-center justify-center rounded-md border border-base-content/10 px-3 text-sm text-base-content/70 hover:border-primary hover:text-primary;
+  }
+
+  .e-content .wp-block-query-pagination .page-numbers.current,
+  .e-content .wp-block-comments-pagination .page-numbers.current {
+    @apply border-primary bg-primary text-white;
+  }
+
+  /* WP theme blocks inside post content: post author + comment query loop */
+  .e-content .wp-block-avatar img,
+  .e-content .wp-block-post-author__avatar img {
+    @apply rounded-full;
+  }
+
+  .e-content .wp-block-post-author {
+    @apply flex flex-wrap items-center gap-4;
+  }
+
+  .e-content .wp-block-post-author__name {
+    @apply font-work text-base font-semibold text-base-content;
+  }
+
+  .e-content .wp-block-comments-title {
+    @apply font-work text-2xl font-semibold text-base-content;
+  }
+
+  .e-content .wp-block-comment-template {
+    @apply list-none space-y-6 pl-0;
+  }
+
+  .e-content .wp-block-comment-template > li {
+    @apply rounded-xl border border-base-content/10 p-5;
+  }
+
+  .e-content .wp-block-comment-author-name,
+  .e-content .wp-block-comment-date {
+    @apply font-work text-sm;
+  }
+
+  .e-content .wp-block-comment-content {
+    @apply mt-2 font-work text-base leading-6 text-base-content/80;
+  }
+
+  .nav-links {
+    @apply mt-12 flex flex-wrap items-center justify-center gap-2;
+  }
+
+  .page-numbers {
+    @apply inline-flex h-10 min-w-10 items-center justify-center rounded-md border border-base-content/10 px-3 font-work text-sm text-base-content/70 hover:border-primary hover:text-primary;
+  }
+
+  .page-numbers.current {
+    @apply border-primary bg-primary text-white;
+  }
+
+  .comment-list .comment {
+    @apply border-b border-base-content/10 py-6 text-sm first:pt-0 last:border-0;
+  }
+
+  .comment-list .children {
+    @apply mt-6 border-l border-base-content/10 pl-6;
+  }
+
+  .comment-form p {
+    @apply mb-4 font-work text-sm;
+  }
+
+  .comment-form input[type="text"],
+  .comment-form input[type="email"],
+  .comment-form input[type="url"],
+  .comment-form textarea {
+    @apply w-full rounded-md border border-base-content/10 bg-base-100 px-4 py-3 font-work text-base text-base-content outline-none focus:border-primary;
+  }
+
+  .comment-form .submit {
+    @apply cursor-pointer rounded-md bg-primary px-5 py-3 font-work text-sm font-medium text-white transition hover:bg-primary-focus;
+  }
+
+  /* ponytail: hand-rolled prose instead of @tailwindcss/typography; add the plugin if rich post content needs more */
+  .e-content {
+    @apply font-serif text-xl leading-8 text-base-content/80;
+  }
+
+  .e-content > * + * {
+    @apply mt-6;
+  }
+
+  .e-content h2 {
+    @apply mt-8 mb-4 font-work text-2xl font-semibold leading-7 text-base-content;
+  }
+
+  .e-content h3 {
+    @apply mt-8 mb-4 font-work text-2xl font-semibold leading-7 text-base-content;
+  }
+
+  .e-content a {
+    @apply text-primary transition hover:text-primary-focus;
+  }
+
+  .e-content ul {
+    @apply list-disc space-y-1 pl-6;
+  }
+
+  .e-content ol {
+    @apply list-decimal space-y-1 pl-6;
+  }
+
+  .e-content blockquote {
+    @apply mt-8 rounded-xl border-l-4 border-base-content/10 bg-base-200 p-8 font-work text-2xl italic text-base-content;
+  }
+
+  .e-content img {
+    @apply rounded-xl;
+  }
+
+  .e-content pre {
+    @apply overflow-x-auto rounded-xl bg-neutral p-4 text-sm text-base-200;
+  }
+
+  /* WP widget blocks (archives/categories can be dozens of items) */
+  .e-content .wp-block-archives-list,
+  .e-content .wp-block-categories-list {
+    @apply gap-8 font-work text-base sm:columns-2;
+  }
+
+  .e-content .wp-block-archives-list li,
+  .e-content .wp-block-categories-list li {
+    @apply break-inside-avoid;
+  }
+
+  .e-content .wp-block-calendar {
+    @apply font-work text-sm;
+  }
+
+  .e-content .wp-block-calendar table {
+    @apply w-full border-collapse;
+  }
+
+  .e-content .wp-block-calendar th,
+  .e-content .wp-block-calendar td {
+    @apply border border-base-content/10 p-2 text-center;
+  }
+
+  .e-content .wp-block-calendar th {
+    @apply bg-base-200 font-semibold;
+  }
+
+  .e-content .wp-block-calendar td#today {
+    @apply bg-primary/10 font-semibold text-primary;
+  }
+}

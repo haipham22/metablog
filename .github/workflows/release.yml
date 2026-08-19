@@ -13,17 +13,21 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '24'
+          cache: 'pnpm'
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.4'
           extensions: mbstring, dom, curl, fileinfo, json, libxml
           tools: composer
 
@@ -31,10 +35,10 @@ jobs:
         run: composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-scripts
 
       - name: Install Node.js dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build assets
-        run: npm run build
+        run: pnpm build
 
       - name: Create ZIP package
         run: |

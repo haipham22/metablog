@@ -76,7 +76,8 @@ add_action('after_setup_theme', function () {
      * @link https://developer.wordpress.org/reference/functions/register_nav_menus/
      */
     register_nav_menus([
-        'primary_navigation' => __('Primary Navigation', 'sage'),
+        'primary_navigation' => __('Primary Navigation', 'metablog'),
+        'footer_navigation' => __('Footer Navigation', 'metablog'),
     ]);
 
     /**
@@ -144,12 +145,36 @@ add_action('widgets_init', function () {
     ];
 
     register_sidebar([
-        'name' => __('Primary', 'sage'),
+        'name' => __('Primary', 'metablog'),
         'id' => 'sidebar-primary',
     ] + $config);
 
     register_sidebar([
-        'name' => __('Footer', 'sage'),
+        'name' => __('Footer', 'metablog'),
         'id' => 'sidebar-footer',
     ] + $config);
+});
+
+/**
+ * Footer copyright text (Customizer → Theme Options).
+ *
+ * @return void
+ */
+add_action('customize_register', function (\WP_Customize_Manager $wp_customize) {
+    $wp_customize->add_section('metablog_footer', [
+        'title' => __('Theme Options', 'metablog'),
+        'priority' => 40,
+    ]);
+
+    $wp_customize->add_setting('metablog_footer_copyright', [
+        'sanitize_callback' => 'wp_kses_post',
+        'transport' => 'refresh',
+    ]);
+
+    $wp_customize->add_control('metablog_footer_copyright', [
+        'label' => __('Footer copyright', 'metablog'),
+        'description' => __('Supports <a>, <strong>, <em>. Empty falls back to: © {year} {site} All Rights Reserved.', 'metablog'),
+        'section' => 'metablog_footer',
+        'type' => 'text',
+    ]);
 });

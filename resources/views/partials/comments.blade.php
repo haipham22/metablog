@@ -1,7 +1,7 @@
 @if (! post_password_required())
-  <section id="comments" class="comments">
+  <section id="comments" class="comments mt-16 border-t border-zinc-200 pt-10">
     @if ($responses())
-      <h2>
+      <h2 class="mb-8 text-2xl font-semibold tracking-tight text-zinc-900">
         {!! $title !!}
       </h2>
 
@@ -11,7 +11,7 @@
 
       @if ($paginated())
         <nav aria-label="Comment">
-          <ul class="pager">
+          <ul class="pager mt-8 flex justify-between gap-4 text-sm">
             @if ($previous())
               <li class="previous">
                 {!! $previous !!}
@@ -30,7 +30,7 @@
 
     @if ($closed())
       <x-alert type="warning">
-        {!! __('Comments are closed.', 'sage') !!}
+        {!! __('Comments are closed.', 'metablog') !!}
       </x-alert>
     @endif
 
