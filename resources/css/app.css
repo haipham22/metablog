@@ -375,4 +375,67 @@ html {
   .e-content .wp-block-calendar td#today {
     @apply bg-primary/10 font-semibold text-primary;
   }
+
+  /* media blocks: gallery / cover / media-text / video / audio / file */
+  /* grid beats core's flex layout (its flex-basis forces 3-up in a narrow column);
+     !important needed against WP's inline layout styles */
+  .e-content .wp-block-gallery {
+    @apply my-8 grid grid-cols-2 gap-4;
+    display: grid !important;
+  }
+
+  .e-content .wp-block-gallery figure {
+    @apply m-0 w-full;
+    width: 100% !important; /* core sets inline flex-basis widths */
+  }
+
+  .e-content .wp-block-gallery img {
+    @apply h-full w-full rounded-xl object-cover;
+  }
+
+  .e-content .wp-block-cover {
+    @apply my-8 min-h-64 rounded-xl;
+  }
+
+  .e-content .wp-block-cover img {
+    @apply rounded-xl;
+  }
+
+  .e-content .wp-block-media-text {
+    @apply my-8 grid gap-6 md:grid-cols-2;
+  }
+
+  .e-content .wp-block-media-text figure {
+    @apply m-0;
+  }
+
+  .e-content .wp-block-media-text img,
+  .e-content .wp-block-media-text video {
+    @apply h-full w-full rounded-xl object-cover;
+  }
+
+  .e-content video,
+  .e-content .wp-block-video video {
+    @apply my-8 w-full rounded-xl;
+  }
+
+  .e-content audio {
+    @apply my-8 w-full;
+  }
+
+  .e-content .wp-block-file {
+    @apply my-8 font-work text-base;
+  }
+
+  .e-content .wp-block-file a {
+    @apply text-primary;
+  }
+
+  .e-content .wp-block-pullquote {
+    @apply my-8 border-l-4 border-base-content/10 font-work text-2xl italic;
+  }
+
+  .e-content .wp-block-button > a {
+    @apply rounded-md bg-primary px-5 py-3 font-work text-sm font-medium text-white transition hover:bg-primary-focus;
+  }
 }
